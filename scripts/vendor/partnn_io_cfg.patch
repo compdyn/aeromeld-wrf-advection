@@ -1,0 +1,25 @@
+diff --git a/partnn/io_cfg.py b/partnn/io_cfg.py
+index 69467a2..2ceb035 100644
+--- a/partnn/io_cfg.py
++++ b/partnn/io_cfg.py
+@@ -1,14 +1,12 @@
+ import os
+-from textwrap import dedent
+ 
+ projname = 'code_partnn'
+-cwd_list = os.getcwd().split(os.sep)
+-msg = f"""
+-    The project name "{projname}" must appear exactly
+-    once in the current working directory:
+-        >> os.getcwd() == {os.getcwd()}"""
+-assert cwd_list.count(projname) == 1, dedent(msg)
+-PROJPATH = os.sep.join(cwd_list[:cwd_list.index(projname) + 1])
++# Project root is the parent of the `partnn` package, so this works no matter
++# what the current working directory is. Override with PARTNN_PROJPATH if the
++# package is ever installed non-editable (i.e. copied into site-packages).
++PROJPATH = os.environ.get(
++    'PARTNN_PROJPATH',
++    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ 
+ cache_dir = f'{PROJPATH}/.cache'
+ configs_dir = f'{PROJPATH}/configs'

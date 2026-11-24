@@ -1,0 +1,13 @@
+# round 40 (2026-11-19, the final rebuild): the two training checks of the decoder trained without mixtures, on
+# the drydiam targets of round 39 (dry diameter, every mass including water; cache_drydiam.npz):
+#   twin_k16kl0: round 39's twin_k16 recipe WITHOUT the KL term (--kl 0), ten seeds, as r38 (dry) and r35 (wet);
+#   twin_mix0:   round 39's twin_none recipe WITH the KL term (--kl 0.03), no mixtures, four seeds, as r34 (wet).
+# Run as r39: CODE=$M/affx/r39/code sbatch -J aeromeld_r40_<a|b> dry_decoders.sbatch TASKFILE $M/affx/r40
+# Part b: twin_k16kl0 seeds 5-9, twin_mix0 seeds 2-3.
+--name r40_twin_k16kl0_s5 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 5 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_k16kl0_s6 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 6 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_k16kl0_s7 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 7 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_k16kl0_s8 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 8 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_k16kl0_s9 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 9 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_mix0_s2 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 0 --seeds 2 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz
+--name r40_twin_mix0_s3 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 0 --seeds 3 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_drydiam.npz

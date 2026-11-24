@@ -1,0 +1,1 @@
+--name r31_x_nl_mix10_k16_s78 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 7 8

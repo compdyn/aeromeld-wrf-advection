@@ -1,0 +1,86 @@
+diff --git a/chem/module_emissions_anthropogenics.F b/chem/module_emissions_anthropogenics.F
+index 1bd05ebf..548bf8c7 100755
+--- a/chem/module_emissions_anthropogenics.F
++++ b/chem/module_emissions_anthropogenics.F
+@@ -294,7 +294,7 @@ is_mozart:if( is_moz_chm ) then
+               if( dN_emis > 0.0 .and. N_new > 0.0 ) then
+                 do iv = 1, max_ltnt
+                   if( e_ltnt_idx(iv) >= param_first_scalar .and. ltnt_idx(iv) >= param_first_scalar ) &
+-                    chem(i,k,j,ltnt_idx(iv)) = (N_old*chem(i,k,j,ltnt_idx(iv)) + dN_emis*emis_ant(i,k,j,e_ltnt_idx(iv))) / N_new
++                    chem(i,k,j,ltnt_idx(iv)) = chem(i,k,j,ltnt_idx(iv)) + dN_emis*emis_ant(i,k,j,e_ltnt_idx(iv))
+                 end do
+               endif
+               chem(i,k,j,p_ntot) = N_new
+diff --git a/dyn_em/module_em.F b/dyn_em/module_em.F
+index c3585cb2..19bc7f1d 100644
+--- a/dyn_em/module_em.F
++++ b/dyn_em/module_em.F
+@@ -1289,10 +1289,6 @@ SUBROUTINE rk_scalar_tend ( scs, sce, config_flags,          &
+ 
+       ELSE IF( (rk_step == rk_order) .and. (adv_opt == MONOTONIC) ) THEN
+ 
+-        WRITE(*,*) 'FLUX DEBUG: calling advect_scalar_mono, im=', im, &
+-            ' adv_opt=', adv_opt, &
+-            ' rk_step=', rk_step, ' rk_order=', rk_order, &
+-            ' flux_out_east present=', PRESENT(flux_out_east)
+ 
+         CALL advect_scalar_mono       ( scalar(ims,kms,jms,im),             &
+                                         scalar_old(ims,kms,jms,im),         &
+@@ -1312,11 +1308,6 @@ SUBROUTINE rk_scalar_tend ( scs, sce, config_flags,          &
+                                         flux_out_north, flux_out_south,     &
+                                         flux_out_top, flux_out_bottom       )
+ 
+-        IF (PRESENT(flux_out_east)) THEN
+-          WRITE(*,*) 'FLUX DEBUG: after advect_scalar_mono, flux_out_east min/max=', &
+-              MINVAL(flux_out_east(its:min(ite,ide-1),kds:kde-1,jts:min(jte,jde-1))), &
+-              MAXVAL(flux_out_east(its:min(ite,ide-1),kds:kde-1,jts:min(jte,jde-1)))
+-        ENDIF
+ 
+       ELSE IF( (rk_step == rk_order) .and. (adv_opt == WENO_SCALAR) ) THEN
+ 
+diff --git a/dyn_em/solve_em.F b/dyn_em/solve_em.F
+index fa466e69..07642414 100644
+--- a/dyn_em/solve_em.F
++++ b/dyn_em/solve_em.F
+@@ -2005,7 +2005,7 @@ BENCH_END(small_step_finish_tim)
+          !$OMP PRIVATE ( ij )
+          DO ij = 1 , grid%num_tiles
+            CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+-           DO im = num_3d_c, num_3d_c
++           DO im = PARAM_FIRST_SCALAR, num_3d_c
+              CALL rk_update_scalar_pd( im, im,                                  &
+                                        chem_old(ims,kms,jms,im),                &
+                                        chem_tend(ims,kms,jms,im),               &
+@@ -2494,7 +2494,10 @@ BENCH_START(chem_adv_tim)
+          tmp_flux_top    = 0.0
+          tmp_flux_bottom = 0.0
+ 
+-         chem_variable_loop: DO ic = num_3d_c, num_3d_c
++         ! Per-tracer latent advection (2026-11-12): every chem species, the latents
++         ! included, is advected by WRF's scalar advection with its own limiter. The
++         ! latents are stored extensively (ltnt_var = ntot * z, per kg).
++         chem_variable_loop: DO ic = PARAM_FIRST_SCALAR, num_3d_c
+ 
+            !$OMP PARALLEL DO   &
+            !$OMP PRIVATE ( ij, tenddec )
+@@ -2582,9 +2585,6 @@ BENCH_START(chem_adv_tim)
+          grid%flux_out_top    = tmp_flux_top
+          grid%flux_out_bottom = tmp_flux_bottom
+ 
+-         WRITE(*,*) 'FLUX DEBUG solve_em: after tile_loop_1, flux_out_east min/max=', &
+-             MINVAL(grid%flux_out_east(ims:ime,kms:kme,jms:jme)), &
+-             MAXVAL(grid%flux_out_east(ims:ime,kms:kme,jms:jme))
+ 
+ if ( config_flags%do_pvozone ) then
+ #ifdef DM_PARALLEL
+@@ -2669,7 +2669,9 @@ end if
+ !  Update other latent variables using flux fractions from num_3d_c.
+ !  flux_out_* are fractional (positive = outflow from cell).
+ !  Only valid on the final RK step when advect_scalar_mono was called.
+-       IF ( rk_step == rk_order .AND. num_3d_c > PARAM_FIRST_SCALAR ) THEN
++       ! The donor-cell latent update below is switched off: the latents are now
++       ! advected with the other chem species (per-tracer latent advection).
++       IF ( .FALSE. .AND. rk_step == rk_order .AND. num_3d_c > PARAM_FIRST_SCALAR ) THEN
+ 
+ !  Halo exchange for flux_out arrays before neighbor access
+ #ifdef DM_PARALLEL

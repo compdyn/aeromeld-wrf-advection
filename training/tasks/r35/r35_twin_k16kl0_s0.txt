@@ -1,0 +1,3 @@
+# round 35: the main model's recipe (twin_k16: mixtures of up to 16) WITHOUT the KL term, seed 0, on the
+# optics-corrected targets: KL-matched to twin_none, so the two differ only by training on mixtures
+--name r35_twin_k16kl0_s0 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 16 --seeds 0 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_optfix.npz

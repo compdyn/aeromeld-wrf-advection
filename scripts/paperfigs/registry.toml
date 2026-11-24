@@ -1,0 +1,3443 @@
+# Models and WRF-ML runs. See paperfigs/registry.py for the rules.
+#
+# Hand-typed:  label, family, notes (models); role, notes (runs); [sets]
+# Derived:     n_latent, emission_rate -- written by register_runs.py from the
+#              run's files and re-checked on use. Never edit them by hand.
+#
+# role: main (exactly one; makes the paper's single-model figures) |
+#       appendix | exploratory | superseded
+#
+# New runs:  python register_runs.py --write   (then edit the stubs it appends)
+
+[sets]
+# The runs the cross-model figures (plot/model_comparison.py, candidates_mixing)
+# compare, in legend order. From 2026-11-11 the paper's own models (training/,
+# notes/affx_story.md section 8), seed 0, as retrained on the optics-corrected targets
+# (round 33, the _of models; notes/pmc_diagnostics_check.md): the mixture-training
+# sequence of the nonlinear twin, then the affine AX-rel1.
+# From 2026-11-12 the runs are our offline replay of the case's transport (transport/,
+# notes/transport_schemes.md) with separate limiters per latent component (_sep), the
+# paper's chosen latent advection; the online WRF-AeroMELD runs (_5e7, donor-cell as coded
+# in latent_advection 838cfd48) are kept as *_online.
+# Each model at its representative seed (rep<k> below): twin_k16 6, twin_none 0, twin_pairs 9,
+# twin_k32 8, ax_rel1 5.
+paper_compare = ["twin_k16_of.6.0_sep", "twin_none_of.0.0_sep", "twin_pairs_of.9.0_sep",
+                 "twin_k32_of.8.0_sep", "ax_rel1_of.5.0_sep"]
+# The mixture-training sequence alone, and the main model against the affine one.
+mixing_sequence = ["twin_none_of.0.0_sep", "twin_pairs_of.9.0_sep", "twin_k16_of.6.0_sep", "twin_k32_of.8.0_sep"]
+twin_vs_affine = ["twin_k16_of.6.0_sep", "ax_rel1_of.5.0_sep"]
+# The main model under each latent advection scheme, from first order to the per-source reference.
+schemes_main = ["twin_k16_of.6.0_donor", "twin_k16_of.6.0_shB", "twin_k16_of.6.0_sep", "twin_k16_of.6.0_persource"]
+# Seed 0 of each model (replay r3), as first run.
+paper_compare_seed0 = ["twin_k16_of.0.0_sep", "twin_none_of.0.0_sep", "twin_pairs_of.0.0_sep",
+                       "twin_k32_of.0.0_sep", "ax_rel1_of.0.0_sep"]
+# Ten seeds of each model, as replays with separate limiters (seed 0 from r3, seed k from s<k>).
+twin_none_of_seeds_sep = ["twin_none_of.0.0_sep", "twin_none_of.1.0_sep", "twin_none_of.2.0_sep", "twin_none_of.3.0_sep", "twin_none_of.4.0_sep", "twin_none_of.5.0_sep", "twin_none_of.6.0_sep", "twin_none_of.7.0_sep", "twin_none_of.8.0_sep", "twin_none_of.9.0_sep"]
+twin_pairs_of_seeds_sep = ["twin_pairs_of.0.0_sep", "twin_pairs_of.1.0_sep", "twin_pairs_of.2.0_sep", "twin_pairs_of.3.0_sep", "twin_pairs_of.4.0_sep", "twin_pairs_of.5.0_sep", "twin_pairs_of.6.0_sep", "twin_pairs_of.7.0_sep", "twin_pairs_of.8.0_sep", "twin_pairs_of.9.0_sep"]
+twin_k16_of_seeds_sep = ["twin_k16_of.0.0_sep", "twin_k16_of.1.0_sep", "twin_k16_of.2.0_sep", "twin_k16_of.3.0_sep", "twin_k16_of.4.0_sep", "twin_k16_of.5.0_sep", "twin_k16_of.6.0_sep", "twin_k16_of.7.0_sep", "twin_k16_of.8.0_sep", "twin_k16_of.9.0_sep"]
+twin_k32_of_seeds_sep = ["twin_k32_of.0.0_sep", "twin_k32_of.1.0_sep", "twin_k32_of.2.0_sep", "twin_k32_of.3.0_sep", "twin_k32_of.4.0_sep", "twin_k32_of.5.0_sep", "twin_k32_of.6.0_sep", "twin_k32_of.7.0_sep", "twin_k32_of.8.0_sep", "twin_k32_of.9.0_sep"]
+ax_rel1_of_seeds_sep = ["ax_rel1_of.0.0_sep", "ax_rel1_of.1.0_sep", "ax_rel1_of.2.0_sep", "ax_rel1_of.3.0_sep", "ax_rel1_of.4.0_sep", "ax_rel1_of.5.0_sep", "ax_rel1_of.6.0_sep", "ax_rel1_of.7.0_sep", "ax_rel1_of.8.0_sep", "ax_rel1_of.9.0_sep"]
+paper_compare_online = ["twin_k16_of.0.0_5e7", "twin_none_of.0.0_5e7", "twin_pairs_of.0.0_5e7",
+                        "twin_k32_of.0.0_5e7", "ax_rel1_of.0.0_5e7"]
+mixing_sequence_online = ["twin_none_of.0.0_5e7", "twin_pairs_of.0.0_5e7", "twin_k16_of.0.0_5e7", "twin_k32_of.0.0_5e7"]
+twin_vs_affine_online = ["twin_k16_of.0.0_5e7", "ax_rel1_of.0.0_5e7"]
+# The same models trained on the original (shell-diameter) optics, before round 33.
+paper_compare_original_optics = ["twin_k16.0.0_5e7", "twin_none.0.0_5e7", "twin_pairs.0.0_5e7",
+                                 "twin_k32.0.0_5e7", "ax_rel1.0.0_5e7"]
+twin_k16_seeds = ["twin_k16.0.0_5e7", "twin_k16.1.0_5e7", "twin_k16.2.0_5e7", "twin_k16.3.0_5e7", "twin_k16.4.0_5e7", "twin_k16.5.0_5e7", "twin_k16.6.0_5e7", "twin_k16.7.0_5e7", "twin_k16.8.0_5e7", "twin_k16.9.0_5e7"]
+twin_k32_seeds = ["twin_k32.0.0_5e7", "twin_k32.1.0_5e7", "twin_k32.2.0_5e7", "twin_k32.3.0_5e7", "twin_k32.4.0_5e7", "twin_k32.5.0_5e7", "twin_k32.6.0_5e7", "twin_k32.7.0_5e7", "twin_k32.8.0_5e7", "twin_k32.9.0_5e7"]
+twin_pairs_seeds = ["twin_pairs.0.0_5e7", "twin_pairs.1.0_5e7", "twin_pairs.2.0_5e7", "twin_pairs.3.0_5e7", "twin_pairs.4.0_5e7", "twin_pairs.5.0_5e7", "twin_pairs.6.0_5e7", "twin_pairs.7.0_5e7", "twin_pairs.8.0_5e7", "twin_pairs.9.0_5e7"]
+twin_none_seeds = ["twin_none.0.0_5e7", "twin_none.1.0_5e7", "twin_none.2.0_5e7", "twin_none.3.0_5e7", "twin_none.4.0_5e7", "twin_none.5.0_5e7", "twin_none.6.0_5e7", "twin_none.7.0_5e7", "twin_none.8.0_5e7", "twin_none.9.0_5e7"]
+ax_rel1_seeds = ["ax_rel1.0.0_5e7", "ax_rel1.1.0_5e7", "ax_rel1.2.0_5e7", "ax_rel1.3.0_5e7", "ax_rel1.4.0_5e7", "ax_rel1.5.0_5e7", "ax_rel1.6.0_5e7", "ax_rel1.7.0_5e7", "ax_rel1.8.0_5e7", "ax_rel1.9.0_5e7"]
+ax_k16_seeds = ["ax_k16.0.0_5e7", "ax_k16.1.0_5e7", "ax_k16.2.0_5e7", "ax_k16.3.0_5e7", "ax_k16.4.0_5e7", "ax_k16.5.0_5e7", "ax_k16.6.0_5e7", "ax_k16.7.0_5e7", "ax_k16.8.0_5e7", "ax_k16.9.0_5e7"]
+twin_k16_of_seeds = ["twin_k16_of.0.0_5e7", "twin_k16_of.1.0_5e7", "twin_k16_of.2.0_5e7", "twin_k16_of.3.0_5e7", "twin_k16_of.4.0_5e7", "twin_k16_of.5.0_5e7", "twin_k16_of.6.0_5e7", "twin_k16_of.7.0_5e7", "twin_k16_of.8.0_5e7", "twin_k16_of.9.0_5e7"]
+twin_k32_of_seeds = ["twin_k32_of.0.0_5e7", "twin_k32_of.1.0_5e7", "twin_k32_of.2.0_5e7", "twin_k32_of.3.0_5e7", "twin_k32_of.4.0_5e7", "twin_k32_of.5.0_5e7", "twin_k32_of.6.0_5e7", "twin_k32_of.7.0_5e7", "twin_k32_of.8.0_5e7", "twin_k32_of.9.0_5e7"]
+twin_pairs_of_seeds = ["twin_pairs_of.0.0_5e7", "twin_pairs_of.1.0_5e7", "twin_pairs_of.2.0_5e7", "twin_pairs_of.3.0_5e7", "twin_pairs_of.4.0_5e7", "twin_pairs_of.5.0_5e7", "twin_pairs_of.6.0_5e7", "twin_pairs_of.7.0_5e7", "twin_pairs_of.8.0_5e7", "twin_pairs_of.9.0_5e7"]
+twin_none_of_seeds = ["twin_none_of.0.0_5e7", "twin_none_of.1.0_5e7", "twin_none_of.2.0_5e7", "twin_none_of.3.0_5e7", "twin_none_of.4.0_5e7", "twin_none_of.5.0_5e7", "twin_none_of.6.0_5e7", "twin_none_of.7.0_5e7", "twin_none_of.8.0_5e7", "twin_none_of.9.0_5e7"]
+ax_rel1_of_seeds = ["ax_rel1_of.0.0_5e7", "ax_rel1_of.1.0_5e7", "ax_rel1_of.2.0_5e7", "ax_rel1_of.3.0_5e7", "ax_rel1_of.4.0_5e7", "ax_rel1_of.5.0_5e7", "ax_rel1_of.6.0_5e7", "ax_rel1_of.7.0_5e7", "ax_rel1_of.8.0_5e7", "ax_rel1_of.9.0_5e7"]
+ax_k16_of_seeds = ["ax_k16_of.0.0_5e7", "ax_k16_of.1.0_5e7", "ax_k16_of.2.0_5e7", "ax_k16_of.3.0_5e7", "ax_k16_of.4.0_5e7", "ax_k16_of.5.0_5e7", "ax_k16_of.6.0_5e7", "ax_k16_of.7.0_5e7", "ax_k16_of.8.0_5e7", "ax_k16_of.9.0_5e7"]
+
+# Until 2026-11-11 (the earlier models; the paper's figures before the new models):
+# the two MLP decoders, then the affine decoders by exponent, one L = 10 run per
+# decoder type, all trained 1e6 iterations, plus the regularized MLP at L = 50.
+paper_compare_2026_11_08 = ["05_nonlinvlong.0.0_5e7", "06_nonlinregvlong.3.0_5e7",
+                            "05_linuvlong.0.0_5e7", "11_linpvlong.5.0_5e7", "05_linxvlong10.1.0_5e7"]
+
+[models."02_mlpprt.0.0"]
+label = "02_mlpprt.0.0"
+family = ""
+notes = ""
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_linplong.5.0"]
+label = "05_linplong.5.0"
+family = ""
+notes = ""
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_linuvlong.0.0"]
+label = "Affine, $p = 0.1$"
+family = "affine"
+notes = "Affine decoder (nn/dec/depth 0) into the transformed units: exponent 0.1 on frozen fraction and optics, 0.3 mass, 0.5 number (training desc 05_linuvlong)."
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_linuvlong.1.0"]
+label = "05_linuvlong.1.0"
+family = ""
+notes = ""
+seed_idx = 0
+n_latent = 49          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_linxvlong.1.0"]
+label = "05_linxvlong.1.0"
+family = ""
+notes = ""
+seed_idx = 0
+n_latent = 49          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_linxvlong10.1.0"]
+label = "Affine, $p = 1$"
+family = "affine"
+notes = "Affine decoder into physical units (all exponents 1), element scales, L = 10; mixes exactly, and decodes to <= 0 in places (training desc 05_linxvlong10)."
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_nonlinvlong.0.0"]
+label = "MLP"
+family = "mlp"
+notes = "Nonlinear MLP decoder, L = 10, 1e6 iterations (training desc 05_nonlinvlong)."
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."05_nonlinvlong.1.0"]
+label = "05_nonlinvlong.1.0"
+family = ""
+notes = ""
+seed_idx = 0
+n_latent = 49          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."06_nonlinregvlong.3.0"]
+label = "MLP, regularized, $d_z = 49$"
+family = "mlp"
+notes = "The 05_nonlinvlong MLP with KL weight 0.03 and mixup weight 10, config 3 = L = 50 (training desc 06_nonlinregvlong)."
+seed_idx = 0
+n_latent = 49          # derived: z dimensions in the wrfout (ntot not counted)
+
+[models."11_linpvlong.5.0"]
+label = "Affine, $p = 0.7$"
+family = "affine"
+notes = "Affine decoder into power-transformed per-particle units, config 5: exponent 0.7; the 1e6-iteration retrain of 05_linplong.5.0 (training desc 11_linpvlong)."
+seed_idx = 0
+n_latent = 9          # derived: z dimensions in the wrfout (ntot not counted)
+
+[runs."02_mlpprt.0.0_5e7"]
+model = "02_mlpprt.0.0"
+wrf_dir = "latent_advection_cares_v3match"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_linplong.5.0_5e7"]
+model = "05_linplong.5.0"
+wrf_dir = "latent_advection_cares_v3match_05_linplong.5.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_linuvlong.0.0_5e7"]
+model = "05_linuvlong.0.0"
+wrf_dir = "latent_advection_cares_v3match_05_linuvlong.0.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_linuvlong.1.0_5e7"]
+model = "05_linuvlong.1.0"
+wrf_dir = "latent_advection_cares_v3match_05_linuvlong.1.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_linxvlong.1.0_5e7"]
+model = "05_linxvlong.1.0"
+wrf_dir = "latent_advection_cares_v3match_05_linxvlong.1.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_linxvlong10.1.0_5e7"]
+model = "05_linxvlong10.1.0"
+wrf_dir = "latent_advection_cares_v3match_05_linxvlong10.1.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_nonlinvlong.0.0_5e7"]
+model = "05_nonlinvlong.0.0"
+wrf_dir = "latent_advection_cares_v3match_05_nonlinvlong.0.0_5e7"
+role = "superseded"   # main until 2026-11-11; now twin_k16.0.0_5e7
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."05_nonlinvlong.1.0_5e7"]
+model = "05_nonlinvlong.1.0"
+wrf_dir = "latent_advection_cares_v3match_05_nonlinvlong.1.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."06_nonlinregvlong.3.0_5e7"]
+model = "06_nonlinregvlong.3.0"
+wrf_dir = "latent_advection_cares_v3match_06_nonlinregvlong.3.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+[runs."11_linpvlong.5.0_5e7"]
+model = "11_linpvlong.5.0"
+wrf_dir = "latent_advection_cares_v3match_11_linpvlong.5.0_5e7"
+role = "exploratory"
+notes = ""
+emission_rate = 5e+07    # derived: max E_NTOT of the wrfchemi
+
+# --- The paper's own models (training/README.md), added 2026-11-11 -----------
+# backend = "affx": numpy model files in data/models/, runs made on Perlmutter
+# (training/wrf/); products are built from the run extracts in data/wrfml_runs/.
+# n_latent and emission_rate were derived from the extracts and build_run.py's
+# check of the inputs (E_NTOT 5e7), not typed by hand.
+
+[models."twin_k16.0.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.1.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.2.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.3.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.4.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.5.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.6.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.7.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.8.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16.9.0"]
+label = "Nonlinear, up to 16-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder (MLP 9-256-256-456, positive, monotone heads), KL 0.03, mixup 10 on K-way mixtures of up to 16 populations; the paper's main model. Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.0.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.1.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.2.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.3.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.4.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.5.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.6.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.7.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.8.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32.9.0"]
+label = "Nonlinear, up to 32-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on K-way mixtures of up to 32 populations. Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.0.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.1.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.2.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.3.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.4.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.5.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.6.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.7.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.8.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs.9.0"]
+label = "Nonlinear, 2-way mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, mixup 10 on pairs (the paper_diagpart-style recipe). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.0.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.1.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.2.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.3.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.4.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.5.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.6.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.7.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.8.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none.9.0"]
+label = "Nonlinear, no mixing (original optics)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0, no mixup. Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_mix0.0.0"]
+label = "Nonlinear, no mixing (KL 0.03)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, no mixup (seeds 0-2 only). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_mix0.1.0"]
+label = "Nonlinear, no mixing (KL 0.03)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, no mixup (seeds 0-2 only). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_mix0.2.0"]
+label = "Nonlinear, no mixing (KL 0.03)"
+family = "nonlinear"
+notes = "Twin decoder, KL 0.03, no mixup (seeds 0-2 only). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.0.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.1.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.2.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.3.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.4.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.5.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.6.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.7.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.8.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1.9.0"]
+label = "Affine (original optics)"
+family = "affine"
+notes = "AX-rel1: affine decoder y = A z + b in physical per-particle units, A, b >= 0, monotone CCN and frozen-fraction heads, relative mass loss, KL 0.03, mixup 1. Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[runs."twin_k16.0.0_5e7"]
+model = "twin_k16.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.0.0_5e7"
+role = "superseded"   # main 2026-11-11 until the optics fix; now twin_k16_of.0.0_5e7
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.1.0_5e7"]
+model = "twin_k16.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.2.0_5e7"]
+model = "twin_k16.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.3.0_5e7"]
+model = "twin_k16.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.4.0_5e7"]
+model = "twin_k16.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.5.0_5e7"]
+model = "twin_k16.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.6.0_5e7"]
+model = "twin_k16.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.7.0_5e7"]
+model = "twin_k16.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.8.0_5e7"]
+model = "twin_k16.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16.9.0_5e7"]
+model = "twin_k16.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.0.0_5e7"]
+model = "twin_k32.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.1.0_5e7"]
+model = "twin_k32.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.2.0_5e7"]
+model = "twin_k32.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.3.0_5e7"]
+model = "twin_k32.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.4.0_5e7"]
+model = "twin_k32.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.5.0_5e7"]
+model = "twin_k32.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.6.0_5e7"]
+model = "twin_k32.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.7.0_5e7"]
+model = "twin_k32.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.8.0_5e7"]
+model = "twin_k32.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32.9.0_5e7"]
+model = "twin_k32.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.0.0_5e7"]
+model = "twin_pairs.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.1.0_5e7"]
+model = "twin_pairs.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.2.0_5e7"]
+model = "twin_pairs.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.3.0_5e7"]
+model = "twin_pairs.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.4.0_5e7"]
+model = "twin_pairs.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.5.0_5e7"]
+model = "twin_pairs.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.6.0_5e7"]
+model = "twin_pairs.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.7.0_5e7"]
+model = "twin_pairs.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.8.0_5e7"]
+model = "twin_pairs.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs.9.0_5e7"]
+model = "twin_pairs.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.0.0_5e7"]
+model = "twin_none.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.1.0_5e7"]
+model = "twin_none.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.2.0_5e7"]
+model = "twin_none.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.3.0_5e7"]
+model = "twin_none.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.4.0_5e7"]
+model = "twin_none.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.5.0_5e7"]
+model = "twin_none.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.6.0_5e7"]
+model = "twin_none.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.7.0_5e7"]
+model = "twin_none.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.8.0_5e7"]
+model = "twin_none.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none.9.0_5e7"]
+model = "twin_none.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_mix0.0.0_5e7"]
+model = "twin_mix0.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_mix0.0.0_5e7"
+role = "exploratory"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_mix0.1.0_5e7"]
+model = "twin_mix0.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_mix0.1.0_5e7"
+role = "exploratory"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_mix0.2.0_5e7"]
+model = "twin_mix0.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_mix0.2.0_5e7"
+role = "exploratory"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.0.0_5e7"]
+model = "ax_rel1.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.1.0_5e7"]
+model = "ax_rel1.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.2.0_5e7"]
+model = "ax_rel1.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.3.0_5e7"]
+model = "ax_rel1.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.4.0_5e7"]
+model = "ax_rel1.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.5.0_5e7"]
+model = "ax_rel1.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.6.0_5e7"]
+model = "ax_rel1.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.7.0_5e7"]
+model = "ax_rel1.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.8.0_5e7"]
+model = "ax_rel1.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1.9.0_5e7"]
+model = "ax_rel1.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[models."ax_k16.0.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.1.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.2.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.3.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.4.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.5.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.6.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.7.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.8.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16.9.0"]
+label = "Affine, up to 16-way mixing (original optics)"
+family = "affine"
+notes = "AX-rel1's decoder and losses, trained with mixup 10 on K-way mixtures of up to 16 populations (r30/r31 rel1_mix10_k16). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[runs."ax_k16.0.0_5e7"]
+model = "ax_k16.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.1.0_5e7"]
+model = "ax_k16.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.2.0_5e7"]
+model = "ax_k16.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.3.0_5e7"]
+model = "ax_k16.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.4.0_5e7"]
+model = "ax_k16.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.5.0_5e7"]
+model = "ax_k16.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.6.0_5e7"]
+model = "ax_k16.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.7.0_5e7"]
+model = "ax_k16.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.8.0_5e7"]
+model = "ax_k16.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16.9.0_5e7"]
+model = "ax_k16.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+# --- Round 33 (2026-11-11): the six models retrained on the optics-corrected targets --------
+# (notes/pmc_diagnostics_check.md). Same recipes as the models above; name suffix _of.
+
+[models."twin_k16_of.0.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.1.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.2.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.3.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.4.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.5.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.6.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.7.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.8.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_of.9.0"]
+label = "Nonlinear, up to 16-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.0.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.1.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.2.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.3.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.4.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.5.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.6.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.7.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.8.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_of.9.0"]
+label = "Nonlinear, up to 32-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.0.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.1.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.2.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.3.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.4.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.5.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.6.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.7.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.8.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_of.9.0"]
+label = "Nonlinear, 2-way mixing"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.0.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.1.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.2.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.3.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.4.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.5.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.6.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.7.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.8.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_of.9.0"]
+label = "Nonlinear, no mixing"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.0.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.1.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.2.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.3.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.4.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.5.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.6.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.7.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.8.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_of.9.0"]
+label = "Affine"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.0.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.1.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.2.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.3.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.4.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.5.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.6.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.7.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.8.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_k16_of.9.0"]
+label = "Affine, up to 16-way mixing"
+family = "affine"
+notes = "Recipe of ax_k16, trained on the optics-corrected targets (round 33). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[runs."twin_k16_of.0.0_5e7"]
+model = "twin_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.0.0_5e7"
+role = "superseded"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks. The paper's main run until 2026-11-12 (online, donor-cell latent transport as coded)."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.1.0_5e7"]
+model = "twin_k16_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.2.0_5e7"]
+model = "twin_k16_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.3.0_5e7"]
+model = "twin_k16_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.4.0_5e7"]
+model = "twin_k16_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.5.0_5e7"]
+model = "twin_k16_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.6.0_5e7"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.7.0_5e7"]
+model = "twin_k16_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.8.0_5e7"]
+model = "twin_k16_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k16_of.9.0_5e7"]
+model = "twin_k16_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.0.0_5e7"]
+model = "twin_k32_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.1.0_5e7"]
+model = "twin_k32_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.2.0_5e7"]
+model = "twin_k32_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.3.0_5e7"]
+model = "twin_k32_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.4.0_5e7"]
+model = "twin_k32_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.5.0_5e7"]
+model = "twin_k32_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.6.0_5e7"]
+model = "twin_k32_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.7.0_5e7"]
+model = "twin_k32_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.8.0_5e7"]
+model = "twin_k32_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_k32_of.9.0_5e7"]
+model = "twin_k32_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k32_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.0.0_5e7"]
+model = "twin_pairs_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.1.0_5e7"]
+model = "twin_pairs_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.2.0_5e7"]
+model = "twin_pairs_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.3.0_5e7"]
+model = "twin_pairs_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.4.0_5e7"]
+model = "twin_pairs_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.5.0_5e7"]
+model = "twin_pairs_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.6.0_5e7"]
+model = "twin_pairs_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.7.0_5e7"]
+model = "twin_pairs_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.8.0_5e7"]
+model = "twin_pairs_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_pairs_of.9.0_5e7"]
+model = "twin_pairs_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_pairs_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.0.0_5e7"]
+model = "twin_none_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.1.0_5e7"]
+model = "twin_none_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.2.0_5e7"]
+model = "twin_none_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.3.0_5e7"]
+model = "twin_none_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.4.0_5e7"]
+model = "twin_none_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.5.0_5e7"]
+model = "twin_none_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.6.0_5e7"]
+model = "twin_none_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.7.0_5e7"]
+model = "twin_none_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.8.0_5e7"]
+model = "twin_none_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."twin_none_of.9.0_5e7"]
+model = "twin_none_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_none_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.0.0_5e7"]
+model = "ax_rel1_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.1.0_5e7"]
+model = "ax_rel1_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.2.0_5e7"]
+model = "ax_rel1_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.3.0_5e7"]
+model = "ax_rel1_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.4.0_5e7"]
+model = "ax_rel1_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.5.0_5e7"]
+model = "ax_rel1_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.6.0_5e7"]
+model = "ax_rel1_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.7.0_5e7"]
+model = "ax_rel1_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.8.0_5e7"]
+model = "ax_rel1_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_rel1_of.9.0_5e7"]
+model = "ax_rel1_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_rel1_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.0.0_5e7"]
+model = "ax_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.0.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.1.0_5e7"]
+model = "ax_k16_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.1.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.2.0_5e7"]
+model = "ax_k16_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.2.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.3.0_5e7"]
+model = "ax_k16_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.3.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.4.0_5e7"]
+model = "ax_k16_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.4.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.5.0_5e7"]
+model = "ax_k16_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.5.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.6.0_5e7"]
+model = "ax_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.6.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.7.0_5e7"]
+model = "ax_k16_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.7.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.8.0_5e7"]
+model = "ax_k16_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.8.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+[runs."ax_k16_of.9.0_5e7"]
+model = "ax_k16_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_ax_k16_of.9.0_5e7"
+role = "appendix"
+notes = "Perlmutter, WRF 'latent_advection' 838cfd48, GNU, 128 ranks."
+emission_rate = 5e+07    # derived: E_NTOT of the build (build_run.py check)
+
+# --- Offline replays (transport/, replay r3 of 2026-11-12; extracts by transport/extract_replay.py).
+# Same meteorology, inputs and emissions as the _5e7 runs; one run per model and latent advection scheme.
+
+[runs."twin_k16_of.0.0_sep"]
+model = "twin_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "appendix"
+notes = "Offline replay r3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.0.0_shB"]
+model = "twin_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.0.0_donor"]
+model = "twin_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.0.0_persource"]
+model = "twin_k16_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."twin_none_of.0.0_sep"]
+model = "twin_none_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "appendix"
+notes = "Offline replay r3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.0.0_shB"]
+model = "twin_none_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_none_of.0.0_donor"]
+model = "twin_none_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_none_of.0.0_persource"]
+model = "twin_none_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.0.0_sep"]
+model = "twin_pairs_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "appendix"
+notes = "Offline replay r3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.0.0_shB"]
+model = "twin_pairs_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.0.0_donor"]
+model = "twin_pairs_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.0.0_persource"]
+model = "twin_pairs_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.0.0_sep"]
+model = "twin_k32_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "appendix"
+notes = "Offline replay r3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.0.0_shB"]
+model = "twin_k32_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.0.0_donor"]
+model = "twin_k32_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.0.0_persource"]
+model = "twin_k32_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.0.0_sep"]
+model = "ax_rel1_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "appendix"
+notes = "Offline replay r3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.0.0_shB"]
+model = "ax_rel1_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.0.0_donor"]
+model = "ax_rel1_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.0.0_persource"]
+model = "ax_rel1_of.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/r3"
+role = "exploratory"
+notes = "Offline replay r3, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+# --- Offline replays of seeds 1-9 (transport/, replays s1..s9 of 2026-11-12, separate limiters).
+
+[runs."twin_none_of.1.0_sep"]
+model = "twin_none_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s1"
+role = "appendix"
+notes = "Offline replay s1, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.2.0_sep"]
+model = "twin_none_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s2"
+role = "appendix"
+notes = "Offline replay s2, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.3.0_sep"]
+model = "twin_none_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s3"
+role = "appendix"
+notes = "Offline replay s3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.4.0_sep"]
+model = "twin_none_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s4"
+role = "appendix"
+notes = "Offline replay s4, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.5.0_sep"]
+model = "twin_none_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s5"
+role = "appendix"
+notes = "Offline replay s5, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.6.0_sep"]
+model = "twin_none_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s6"
+role = "appendix"
+notes = "Offline replay s6, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.7.0_sep"]
+model = "twin_none_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s7"
+role = "appendix"
+notes = "Offline replay s7, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.8.0_sep"]
+model = "twin_none_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s8"
+role = "appendix"
+notes = "Offline replay s8, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_none_of.9.0_sep"]
+model = "twin_none_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s9"
+role = "appendix"
+notes = "Offline replay s9, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.1.0_sep"]
+model = "twin_pairs_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s1"
+role = "appendix"
+notes = "Offline replay s1, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.2.0_sep"]
+model = "twin_pairs_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s2"
+role = "appendix"
+notes = "Offline replay s2, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.3.0_sep"]
+model = "twin_pairs_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s3"
+role = "appendix"
+notes = "Offline replay s3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.4.0_sep"]
+model = "twin_pairs_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s4"
+role = "appendix"
+notes = "Offline replay s4, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.5.0_sep"]
+model = "twin_pairs_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s5"
+role = "appendix"
+notes = "Offline replay s5, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.6.0_sep"]
+model = "twin_pairs_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s6"
+role = "appendix"
+notes = "Offline replay s6, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.7.0_sep"]
+model = "twin_pairs_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s7"
+role = "appendix"
+notes = "Offline replay s7, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.8.0_sep"]
+model = "twin_pairs_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s8"
+role = "appendix"
+notes = "Offline replay s8, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.9.0_sep"]
+model = "twin_pairs_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s9"
+role = "appendix"
+notes = "Offline replay s9, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.1.0_sep"]
+model = "twin_k16_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s1"
+role = "appendix"
+notes = "Offline replay s1, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.2.0_sep"]
+model = "twin_k16_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s2"
+role = "appendix"
+notes = "Offline replay s2, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.3.0_sep"]
+model = "twin_k16_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s3"
+role = "appendix"
+notes = "Offline replay s3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.4.0_sep"]
+model = "twin_k16_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s4"
+role = "appendix"
+notes = "Offline replay s4, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.5.0_sep"]
+model = "twin_k16_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s5"
+role = "appendix"
+notes = "Offline replay s5, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.6.0_sep"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s6"
+role = "appendix"   # main until 2026-11-13 (4 h); now twin_k16_of.1.0_sep12h
+notes = "Offline replay s6, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.7.0_sep"]
+model = "twin_k16_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s7"
+role = "appendix"
+notes = "Offline replay s7, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.8.0_sep"]
+model = "twin_k16_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s8"
+role = "appendix"
+notes = "Offline replay s8, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.9.0_sep"]
+model = "twin_k16_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s9"
+role = "appendix"
+notes = "Offline replay s9, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.1.0_sep"]
+model = "twin_k32_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s1"
+role = "appendix"
+notes = "Offline replay s1, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.2.0_sep"]
+model = "twin_k32_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s2"
+role = "appendix"
+notes = "Offline replay s2, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.3.0_sep"]
+model = "twin_k32_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s3"
+role = "appendix"
+notes = "Offline replay s3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.4.0_sep"]
+model = "twin_k32_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s4"
+role = "appendix"
+notes = "Offline replay s4, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.5.0_sep"]
+model = "twin_k32_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s5"
+role = "appendix"
+notes = "Offline replay s5, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.6.0_sep"]
+model = "twin_k32_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s6"
+role = "appendix"
+notes = "Offline replay s6, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.7.0_sep"]
+model = "twin_k32_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s7"
+role = "appendix"
+notes = "Offline replay s7, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.8.0_sep"]
+model = "twin_k32_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s8"
+role = "appendix"
+notes = "Offline replay s8, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.9.0_sep"]
+model = "twin_k32_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s9"
+role = "appendix"
+notes = "Offline replay s9, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.1.0_sep"]
+model = "ax_rel1_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s1"
+role = "appendix"
+notes = "Offline replay s1, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.2.0_sep"]
+model = "ax_rel1_of.2.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s2"
+role = "appendix"
+notes = "Offline replay s2, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.3.0_sep"]
+model = "ax_rel1_of.3.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s3"
+role = "appendix"
+notes = "Offline replay s3, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.4.0_sep"]
+model = "ax_rel1_of.4.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s4"
+role = "appendix"
+notes = "Offline replay s4, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.5.0_sep"]
+model = "ax_rel1_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s5"
+role = "appendix"
+notes = "Offline replay s5, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.6.0_sep"]
+model = "ax_rel1_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s6"
+role = "appendix"
+notes = "Offline replay s6, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.7.0_sep"]
+model = "ax_rel1_of.7.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s7"
+role = "appendix"
+notes = "Offline replay s7, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.8.0_sep"]
+model = "ax_rel1_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s8"
+role = "appendix"
+notes = "Offline replay s8, latent advection: separate limiters."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.9.0_sep"]
+model = "ax_rel1_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/s9"
+role = "appendix"
+notes = "Offline replay s9, latent advection: separate limiters."
+emission_rate = 5e+07
+
+# --- Offline replays of each model's representative seed with every scheme (rep<k>, 2026-11-12).
+# Representative: the seed whose four errors against the exact answer are jointly closest to the
+# ten-seed medians (least sum of |ln(e / median)|; notes/transport_schemes.md).
+
+[runs."twin_k16_of.6.0_donor"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep6"
+role = "exploratory"
+notes = "Offline replay rep6, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.6.0_shB"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep6"
+role = "exploratory"
+notes = "Offline replay rep6, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.6.0_persource"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep6"
+role = "exploratory"
+notes = "Offline replay rep6, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.9.0_donor"]
+model = "twin_pairs_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep9"
+role = "exploratory"
+notes = "Offline replay rep9, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.9.0_shB"]
+model = "twin_pairs_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep9"
+role = "exploratory"
+notes = "Offline replay rep9, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_pairs_of.9.0_persource"]
+model = "twin_pairs_of.9.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep9"
+role = "exploratory"
+notes = "Offline replay rep9, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.8.0_donor"]
+model = "twin_k32_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep8"
+role = "exploratory"
+notes = "Offline replay rep8, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.8.0_shB"]
+model = "twin_k32_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep8"
+role = "exploratory"
+notes = "Offline replay rep8, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."twin_k32_of.8.0_persource"]
+model = "twin_k32_of.8.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep8"
+role = "exploratory"
+notes = "Offline replay rep8, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.5.0_donor"]
+model = "ax_rel1_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep5"
+role = "exploratory"
+notes = "Offline replay rep5, latent advection: donor-cell."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.5.0_shB"]
+model = "ax_rel1_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep5"
+role = "exploratory"
+notes = "Offline replay rep5, latent advection: shared bounded limiter."
+emission_rate = 5e+07
+
+[runs."ax_rel1_of.5.0_persource"]
+model = "ax_rel1_of.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/rep5"
+role = "exploratory"
+notes = "Offline replay rep5, latent advection: per-source transport (reference)."
+emission_rate = 5e+07
+
+# --- WRF-AeroMELD with per-tracer latent advection, run in WRF itself (branch latent_per_tracer,
+# training/wrf/latent_per_tracer.patch): the check of the replay (scripts/checks/pertracer_online.py).
+[runs."twin_k16_of.6.0_pertracer"]
+model = "twin_k16_of.6.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/wrfml/work/runs/latent_advection_cares_v3match_twin_k16_of.6.0_pertracer"
+role = "appendix"
+notes = "Perlmutter, WRF latent_per_tracer (838cfd48 + patch), GNU, 128 ranks; latents stored as ntot * z."
+emission_rate = 5e+07
+
+[runs."twin_k16_of.1.0_sep12h"]
+model = "twin_k16_of.1.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/all1_12h"
+role = "appendix"   # main 2026-11-13 to 11-16 (wet diameter); now twin_k16_dry.0.0_sep12h
+notes = "Offline 12-hour replay all1_12h (transport/rep12_array.sbatch), latent advection: separate limiters. The paper's recommended configuration at its representative seed at 12 h (data/decomposition.json), since 2026-11-13."
+emission_rate = 5e+07
+
+# 2026-11-16: the clean dry-diameter rebuild (training round 37): the five decoders retrained end to end
+# on targets with the size distributions binned by dry diameter (water excluded); config.SUFFIX = "_dry".
+
+[models."twin_none_dry.0.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.1.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.2.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.3.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.4.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.5.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.6.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.7.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.8.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dry.9.0"]
+label = "Nonlinear, no mixtures (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the dry-diameter targets (round 37, r37/r37_twin_none_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.0.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.1.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.2.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.3.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.4.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.5.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.6.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.7.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.8.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dry.9.0"]
+label = "Nonlinear, pairs (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the dry-diameter targets (round 37, r37/r37_twin_pairs_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.0.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.1.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.2.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.3.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.4.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.5.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.6.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.7.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.8.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dry.9.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the dry-diameter targets (round 37, r37/r37_twin_k16_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.0.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.1.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.2.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.3.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.4.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.5.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.6.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.7.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.8.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dry.9.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the dry-diameter targets (round 37, r37/r37_twin_k32_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.0.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.1.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.2.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.3.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.4.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.5.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.6.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.7.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.8.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dry.9.0"]
+label = "Affine (dry diameter)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the dry-diameter targets (round 37, r37/r37_ax_rel1_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[runs."twin_k16_dry.0.0_sep12h"]
+model = "twin_k16_dry.0.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/dry0_12h"
+role = "appendix"   # main 2026-11-16 to 11-19 (dry diameter, dry mass); now twin_k16_dd.5.0_sep12h
+notes = "Offline 12-hour replay dry0_12h (transport/rep12_array.sbatch, REP_PREFIX=dry), latent advection: separate limiters. The paper's recommended configuration at its representative seed at 12 h (data/decomposition.json), since 2026-11-16 (the dry rebuild)."
+emission_rate = 5e+07
+
+# 2026-11-19: the final rebuild (training round 39, the final choice): the five decoders retrained end to
+# end on targets with the size distributions binned by dry diameter and every species' mass, water included
+# (training/dataset/dry_cache.py --basis drydiam); config.SUFFIX = "_dd".
+
+[models."twin_none_dd.0.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.1.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.2.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.3.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.4.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.5.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.6.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.7.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.8.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_none_dd.9.0"]
+label = "Nonlinear, no mixtures (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_none, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_none_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.0.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.1.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.2.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.3.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.4.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.5.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.6.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.7.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.8.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_pairs_dd.9.0"]
+label = "Nonlinear, pairs (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_pairs, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_pairs_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.0.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.1.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.2.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.3.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.4.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.5.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.6.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.7.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.8.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k16_dd.9.0"]
+label = "Nonlinear, up to 16-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k16, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k16_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.0.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.1.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.2.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.3.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.4.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.5.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.6.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.7.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.8.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."twin_k32_dd.9.0"]
+label = "Nonlinear, up to 32-way mixing (dry diameter, with water)"
+family = "nonlinear"
+notes = "Recipe of twin_k32, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_twin_k32_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.0.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s0). Seed 0."
+seed_idx = 0
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.1.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s1). Seed 1."
+seed_idx = 1
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.2.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s2). Seed 2."
+seed_idx = 2
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.3.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s3). Seed 3."
+seed_idx = 3
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.4.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s4). Seed 4."
+seed_idx = 4
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.5.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s5). Seed 5."
+seed_idx = 5
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.6.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s6). Seed 6."
+seed_idx = 6
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.7.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s7). Seed 7."
+seed_idx = 7
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.8.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s8). Seed 8."
+seed_idx = 8
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[models."ax_rel1_dd.9.0"]
+label = "Affine (dry diameter, with water)"
+family = "affine"
+notes = "Recipe of ax_rel1, trained on the drydiam targets: dry diameter, every mass including water (round 39, r39/r39_ax_rel1_s9). Seed 9."
+seed_idx = 9
+backend = "affx"
+n_latent = 9          # derived: z dimensions in the run extract (ntot not counted)
+
+[runs."twin_k16_dd.5.0_sep12h"]
+model = "twin_k16_dd.5.0"
+wrf_dir = "/pscratch/sd/m/mwest/aeromeld/transport/runs/dd5_12h"
+role = "main"
+notes = "Offline 12-hour replay dd5_12h (transport/rep12_array.sbatch, REP_PREFIX=dd), latent advection: separate limiters. The paper's recommended configuration at its representative seed at 12 h (data/decomposition.json), since 2026-11-19 (the final rebuild: dry diameter, every mass including water)."
+emission_rate = 5e+07

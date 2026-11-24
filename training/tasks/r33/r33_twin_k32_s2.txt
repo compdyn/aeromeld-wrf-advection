@@ -1,0 +1,3 @@
+# round 33: twin_k32 (recipe of r31_x_nl_mix10_k32), seed 2, trained on the optics-corrected targets
+# (notes/pmc_diagnostics_check.md; training/dataset/recompute_diagnostics.py)
+--name r33_twin_k32_s2 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 10 --mixk 32 --seeds 2 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_optfix.npz

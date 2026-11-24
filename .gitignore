@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# Data from the Zenodo deposit (unpacked at the repository root)
+data/*
+!data/PRODUCTS.md
+!data/models/
+data/models/*
+!data/models/MANIFEST.txt
+!data/models/SHA256SUMS
+baselines/data/
+baselines/cache/
+wrf_inputs/
+figures/
+graphics/

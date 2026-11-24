@@ -1,0 +1,3 @@
+# round 34: twin_mix0 (recipe of r26_x_nl_mix0: the KL term but no mixtures), seed 9, on the optics-corrected
+# targets as round 33, to replace twin_none (no KL, no mixtures) as the paper's decoder trained without mixtures
+--name r34_twin_mix0_s9 --loss log --pos --warmup 1000 --clip 1 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --dec mlp --lr 3e-3 --lr-dec 0.3 --mixup 0 --seeds 9 --cache /pscratch/sd/m/mwest/aeromeld/affx/cache_optfix.npz

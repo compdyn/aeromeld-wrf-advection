@@ -1,0 +1,1 @@
+--name r28_x_rel1_mix10 --loss log --pos --lr 3e-3 --warmup 1000 --clip 1 --lr-dec 10 --linblocks C,N --kl 0.03 --mono --iters 100000 --exclude-snr 561,635,812 --wblock C=3,F=3 --mloss rel1 --mixup 10

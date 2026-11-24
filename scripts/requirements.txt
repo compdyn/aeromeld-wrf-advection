@@ -1,0 +1,19 @@
+# Packages for making the figures from existing products in data/processed/
+# (plot scripts, make_all.py, models.py --write). Building products from the
+# raw model output needs the partnn conda env instead (torch, partnn, PyPartMC).
+#
+# These are the versions that reproduce the committed figures (checked
+# 2026-11-09, Python 3.12, macOS arm64). matplotlib is pinned to the version
+# the committed PDFs were made with. See README.md, "Running".
+#
+#   uv venv --python 3.12 .venv && uv pip install -r scripts/requirements.txt
+#   (or: python3 -m venv .venv && .venv/bin/pip install -r scripts/requirements.txt)
+
+numpy==2.5.4
+xarray==2026.9.0
+netCDF4==1.7.5.1.post1
+matplotlib==3.10.8
+cartopy==0.26.0
+shapely==2.2.0
+# cartopy needs scipy to draw streamlines (the wind in plot/domain.py)
+scipy==1.18.1
