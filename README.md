@@ -18,9 +18,9 @@ TOMAS, MAM4 and MATRIX), the error analysis, and the figures.
 | What | Where |
 |---|---|
 | WRF-AeroMELD (WRF v4.7.1 with latent advection) | [compdyn/WRF](https://github.com/compdyn/WRF), release `wrf-aeromeld-v1.0`, doi:[10.5281/zenodo.24167410](https://doi.org/10.5281/zenodo.24167410) |
-| Training targets, trained models, WRF input templates, transport results and processed data | Zenodo, doi:DATA_DOI |
+| Training targets, trained models, WRF input templates, transport results and processed data | Zenodo, doi:[10.5281/zenodo.24525988](https://doi.org/10.5281/zenodo.24525988) |
 | The PartMC-MOSAIC scenario library | Illinois Data Bank, doi:[10.13012/B2IDB-2774261_V1](https://doi.org/10.13012/B2IDB-2774261_V1) |
-| Building the particle dataset from the library | [partnn](https://github.com/ehsansaleh/partnn), `dataset_build/` |
+| Building the particle dataset from the library | [partnn](https://github.com/ehsansaleh/partnn), release `aeromeld-wrf-v1.0`, `dataset_build/`, doi:[10.5281/zenodo.24526749](https://doi.org/10.5281/zenodo.24526749) |
 
 Unpack the data archive at the root of this repository, so that its `data/`,
 `baselines/data/` and `wrf_inputs/` directories sit next to the code.

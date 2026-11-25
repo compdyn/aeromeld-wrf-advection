@@ -4,14 +4,56 @@
   "description": "Training and evaluation of the AeroMELD latent aerosol models, offline replays of WRF's advection of the latent state, the sectional and modal schemes they are compared with (MOSAIC, TOMAS, MAM4, MATRIX), the error analysis and the figures of the paper. WRF-AeroMELD itself is archived separately (doi:10.5281/zenodo.24167410).",
   "license": "MIT",
   "creators": [
-    {"name": "Curtis, Jeffrey H.", "affiliation": "University of Illinois Urbana-Champaign", "orcid": "0000-0002-1447-2127"},
-    {"name": "Tang, Wenhan", "affiliation": "University of Illinois Urbana-Champaign", "orcid": "0009-0009-5076-036X"},
-    {"name": "Riemer, Nicole", "affiliation": "University of Illinois Urbana-Champaign", "orcid": "0000-0002-3220-3457"},
-    {"name": "West, Matthew", "affiliation": "University of Illinois Urbana-Champaign", "orcid": "0000-0002-7605-0050"}
+    {
+      "name": "Curtis, Jeffrey H.",
+      "affiliation": "University of Illinois Urbana-Champaign",
+      "orcid": "0000-0002-1447-2127"
+    },
+    {
+      "name": "Tang, Wenhan",
+      "affiliation": "University of Illinois Urbana-Champaign",
+      "orcid": "0009-0009-5076-036X"
+    },
+    {
+      "name": "Riemer, Nicole",
+      "affiliation": "University of Illinois Urbana-Champaign",
+      "orcid": "0000-0002-3220-3457"
+    },
+    {
+      "name": "West, Matthew",
+      "affiliation": "University of Illinois Urbana-Champaign",
+      "orcid": "0000-0002-7605-0050"
+    }
   ],
-  "keywords": ["aerosol mixing state", "machine learning", "latent representation", "advection", "WRF", "particle-resolved"],
+  "keywords": [
+    "aerosol mixing state",
+    "machine learning",
+    "latent representation",
+    "advection",
+    "WRF",
+    "particle-resolved"
+  ],
   "related_identifiers": [
-    {"identifier": "10.5281/zenodo.24167410", "relation": "references", "scheme": "doi"},
-    {"identifier": "10.13012/B2IDB-2774261_V1", "relation": "requires", "scheme": "doi"}
-  ]
+    {
+      "identifier": "10.5281/zenodo.24525988",
+      "relation": "isSupplementedBy",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.24167410",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.13012/B2IDB-2774261_V1",
+      "relation": "requires",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.24526749",
+      "relation": "requires",
+      "scheme": "doi"
+    }
+  ],
+  "version": "v1.0"
 }
