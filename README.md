@@ -1,10 +1,9 @@
-# Advecting latent representations of particle-resolved aerosol in WRF
+# WRF-AeroMELD: advecting a learned representation of particle-resolved aerosol
 
 Code for the paper
 
-> J. H. Curtis, W. Tang, N. Riemer and M. West, *Advecting Latent
-> Representations of Particle-Resolved Aerosol: Transporting Aerosol Mixing
-> State in Three Dimensions with a Learned Latent Space*, submitted to the
+> J. H. Curtis, W. Tang, N. Riemer and M. West, *WRF-AeroMELD:
+> Advecting a Learned Representation of Particle-Resolved Aerosol*, submitted to the
 > Journal of Advances in Modeling Earth Systems (2026).
 
 WRF-AeroMELD represents the aerosol in each grid cell of WRF by the AeroMELD

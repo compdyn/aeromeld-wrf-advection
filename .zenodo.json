@@ -1,5 +1,5 @@
 {
-  "title": "Code for: Advecting Latent Representations of Particle-Resolved Aerosol: Transporting Aerosol Mixing State in Three Dimensions with a Learned Latent Space",
+  "title": "Code for: WRF-AeroMELD: Advecting a Learned Representation of Particle-Resolved Aerosol",
   "upload_type": "software",
   "description": "Training and evaluation of the AeroMELD latent aerosol models, offline replays of WRF's advection of the latent state, the sectional and modal schemes they are compared with (MOSAIC, TOMAS, MAM4, MATRIX), the error analysis and the figures of the paper. WRF-AeroMELD itself is archived separately (doi:10.5281/zenodo.24167410).",
   "license": "MIT",
